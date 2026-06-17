@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<!-- 顶部 -->
+<div class="top-bar">
+    <a href="/" class="nav-home">🏠 首页</a>
+    <div class="nav-title">编辑题目</div>
+</div>
+<head>
+    <meta charset="UTF-8">
+    <title>编辑题目</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+
+<div class="container">
+    <div>
+        <h2></h2>
+    </div>
+    <div class="card center">
+        <h2>✏ 编辑题目</h2>
+    </div>
+
+    <div class="card">
+
+        <form method="post" action="/admin_question_update/{{ q.id }}">
+
+            <input name="question" value="{{ q.question }}">
+            <input name="option_a" value="{{ q.option_a }}">
+            <input name="option_b" value="{{ q.option_b }}">
+            <input name="option_c" value="{{ q.option_c }}">
+            <input name="answer" value="{{ q.answer }}">
+
+            <button type="submit">保存修改</button>
+
+        </form>
+
+    </div>
+
+</div>
+
+</body>
+</html>

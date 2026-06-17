@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>我的</title>
+ <link rel="stylesheet" href="/static/style.css">
+<style>
+
+.container {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 20px;
+}
+
+.card {
+    background: white;
+    padding: 18px;
+    border-radius: 14px;
+    margin-bottom: 16px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+}
+
+.back-btn {
+    position: fixed;
+    top: 16px;
+    left: 16px;
+    background: #2d7a5f;
+    color: white;
+    padding: 8px 14px;
+    border-radius: 8px;
+    text-decoration: none;
+}
+
+.score {
+    color: #2d7a5f;
+    font-weight: bold;
+}
+
+
+
+.minus { color:#c62828; }
+.plus { color:#2d7a5f; }
+</style>
+</head>
+
+<body>
+
+<div class="top-bar">
+    <a href="/" class="nav-home">🏠 首页</a>
+    <div class="nav-title">我的</div>
+</div>
+
+<div class="container">
+    <div>
+        <h2></h2>
+    </div>
+    <!-- 用户信息 -->
+    <div class="card">
+        <h3>个人信息</h3>
+        <p>昵称：{{ user.nickname }}</p>
+        <p class="score">总积分：{{ user.total_points }}</p>
+        {% if session.get('is_admin') %}
+
+            <form method="get" action="/admin">
+                <button type="submit">
+                    🛠 管理后台
+                </button>
+            </form>
+
+        {% endif %}
+    </div>
+
+    <!-- ⭐抽奖模块（补回来了） -->
+    <div class="card">
+        <h3>🎁 积分抽奖</h3>
+
+        <p>每次消耗 10 积分</p>
+
+        <form method="post" action="/lottery">
+            <button type="submit">立即抽奖</button>
+        </form>
+    </div>
+
+    <!-- 记录 -->
+    <div class="card">
+        <h3>积分流水</h3>
+    </div>
+
+    {% for r in records %}
+
+    <div class="card">
+
+        {% if r.correct == 1 %}
+            🎰 抽奖记录
+        {% else %}
+            📝 答题记录
+        {% endif %}
+
+        <p>变动：{{ r.score }}</p>
+        <p>当前积分：{{ r.total }}</p>
+
+    </div>
+
+    {% endfor %}
+
+</div>
+
+</body>
+</html>

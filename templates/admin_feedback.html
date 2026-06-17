@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<!-- 顶部 -->
+<div class="top-bar">
+    <a href="/" class="nav-home">🏠 首页</a>
+    <div class="nav-title">反馈管理</div>
+</div>
+<head>
+    <meta charset="UTF-8">
+    <title>反馈管理</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+
+<div class="container">
+    <div>
+        <h2></h2>
+    </div>
+    <div class="card center">
+        <h2>📩 用户反馈管理</h2>
+    </div>
+
+    {% for f in feedback_list %}
+
+    <div class="card">
+
+        <p>👤 用户ID：{{ f.user_id }}</p>
+
+        <p>🗑 垃圾名称：{{ f.name }}</p>
+
+        <p>❌ 系统分类：{{ f.wrong_category }}</p>
+
+        <p>✅ 正确分类：{{ f.correct_category }}</p>
+
+    </div>
+
+    {% endfor %}
+
+</div>
+
+</body>
+</html>

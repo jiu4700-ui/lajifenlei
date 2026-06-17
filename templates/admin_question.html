@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<!-- 顶部 -->
+<div class="top-bar">
+    <a href="/" class="nav-home">🏠 首页</a>
+    <div class="nav-title">题库管理</div>
+</div>
+<head>
+    <meta charset="UTF-8">
+    <title>题库管理</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+
+<div class="container">
+    <div>
+        <h2></h2>
+    </div>
+    <div class="card center">
+        <h2>❓ 题库管理</h2>
+    </div>
+
+    <!-- 新增 -->
+    <div class="card">
+
+        <h3>➕ 新增题目</h3>
+
+        <form method="post" action="/admin_question_add">
+
+            <input name="question" placeholder="题目">
+            <input name="option_a" placeholder="选项A">
+            <input name="option_b" placeholder="选项B">
+            <input name="option_c" placeholder="选项C">
+            <input name="answer" placeholder="正确答案（A/B/C）">
+
+            <button type="submit">添加题目</button>
+
+        </form>
+
+    </div>
+
+    <!-- 列表 -->
+    {% for q in questions %}
+
+    <div class="card">
+
+        <h3>{{ q.question }}</h3>
+
+        <p>A: {{ q.option_a }}</p>
+        <p>B: {{ q.option_b }}</p>
+        <p>C: {{ q.option_c }}</p>
+        <p>答案：{{ q.answer }}</p>
+
+        <a href="/admin_question_edit/{{ q.id }}">
+            <button>编辑</button>
+        </a>
+
+        <a href="/admin_question_delete/{{ q.id }}">
+            <button style="background:#c62828;">删除</button>
+        </a>
+
+    </div>
+
+    {% endfor %}
+
+</div>
+
+</body>
+</html>

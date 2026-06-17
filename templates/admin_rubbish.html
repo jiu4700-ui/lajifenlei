@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<!-- 顶部 -->
+<div class="top-bar">
+    <a href="/" class="nav-home">🏠 首页</a>
+    <div class="nav-title">垃圾库管理</div>
+</div>
+<head>
+    <meta charset="UTF-8">
+    <title>垃圾库管理</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+
+<div class="container">
+    <div>
+        <h2></h2>
+    </div>
+    <div class="card center">
+        <h2>🗑 垃圾库管理</h2>
+    </div>
+
+    <!-- 新增 -->
+    <div class="card">
+
+        <h3>➕ 新增垃圾</h3>
+
+        <form method="post" action="/admin_rubbish_add">
+
+            <input name="name" placeholder="垃圾名称">
+            <input name="category" placeholder="分类（可回收/厨余/有害/其他）">
+            <input name="description" placeholder="描述">
+
+            <button type="submit">添加</button>
+
+        </form>
+
+    </div>
+
+    <!-- 列表 -->
+    {% for i in items %}
+
+    <div class="card">
+
+        <h3>{{ i.name }}</h3>
+
+        <p>分类：{{ i.category }}</p>
+        <p>描述：{{ i.description }}</p>
+
+        <a href="/admin_rubbish_delete/{{ i.id }}">
+            <button style="background:#c62828;">删除</button>
+        </a>
+
+    </div>
+
+    {% endfor %}
+
+</div>
+
+</body>
+</html>

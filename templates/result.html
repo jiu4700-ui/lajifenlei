@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>识别结果</title>
+    <link rel="stylesheet" href="/static/style.css">
+
+    <style>
+        /* ===== 容器 ===== */
+        .container{
+            max-width:600px;
+            margin:40px auto;
+            padding:20px;
+        }
+
+        /* ===== 基础卡片 ===== */
+        .card{
+            background:white;
+            border-radius:16px;
+            padding:18px;
+            margin-bottom:16px;
+            box-shadow:0 8px 20px rgba(0,0,0,0.06);
+        }
+
+        /* ===== 分类主题色 ===== */
+        .cat-recyclable{
+            background:#e8f5e9;
+            border-left:6px solid #2e7d32;
+        }
+
+        .cat-kitchen{
+            background:#fff3e0;
+            border-left:6px solid #ef6c00;
+        }
+
+        .cat-hazard{
+            background:#ffebee;
+            border-left:6px solid #c62828;
+        }
+
+        .cat-other{
+            background:#eceff1;
+            border-left:6px solid #455a64;
+        }
+
+        /* ===== AI气泡 ===== */
+        .ai-bubble{
+            display:flex;
+            gap:10px;
+            align-items:flex-start;
+            margin-top:10px;
+        }
+
+        .ai-avatar{
+            width:38px;
+            height:38px;
+            border-radius:50%;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            background:#f1f8e9;
+            font-size:20px;
+        }
+
+        .ai-msg{
+            background:white;
+            padding:10px 12px;
+            border-radius:12px;
+            font-size:14px;
+            line-height:1.5;
+            box-shadow:0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        /* ===== 按钮 ===== */
+        button{
+            padding:10px 14px;
+            border:none;
+            border-radius:10px;
+            cursor:pointer;
+            margin-right:10px;
+            background:#2d7a5f;
+            color:white;
+        }
+
+        button:hover{
+            filter:brightness(1.05);
+        }
+
+        .btn-gray{
+            background:#607d8b;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- ===== 结果卡片（带分类颜色） ===== -->
+    <div class="card
+        {% if category == '可回收物' %}cat-recyclable
+        {% elif category == '厨余垃圾' %}cat-kitchen
+        {% elif category == '有害垃圾' %}cat-hazard
+        {% else %}cat-other{% endif %}
+    ">
+
+        <h2>{{ name }}</h2>
+
+        <p><b>分类：</b>{{ category }}</p>
+
+       <div class="ai-bubble">
+            <div class="ai-avatar">😼</div>
+            <div class="ai-msg">
+                 {{ description }}
+            </div>
+        </div>
+
+
+    </div>
+
+    <!-- ===== 操作区 ===== -->
+    <div class="card">
+
+        <button onclick="location.href='/feedback'">反馈错误</button>
+        <button class="btn-gray" onclick="location.href='/'">返回首页</button>
+
+    </div>
+    {% if is_quiz_end %}
+    <canvas id="confetti"></canvas>
+    {% endif %}
+</div>
+{% if is_quiz_end %}
+<script>
+const canvas = document.getElementById("confetti");
+const ctx = canvas.getContext("2d");
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+const pieces = [];
+
+function Piece(){
+    this.x = Math.random() * canvas.width;
+    this.y = Math.random() * canvas.height - canvas.height;
+    this.size = Math.random() * 6 + 2;
+
+    this.speedY = Math.random() * 2 + 1;
+    this.speedX = Math.random() * 1 - 0.5;
+
+    this.angle = Math.random() * 360;
+
+    this.color = `hsla(${Math.random()*360}, 80%, 60%, 0.7)`;
+}
+
+for(let i=0;i<120;i++){
+    pieces.push(new Piece());
+}
+
+function draw(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+
+    pieces.forEach(p=>{
+        p.y += p.speedY;
+        p.x += p.speedX;
+        p.angle += 2;
+
+        if(p.y > canvas.height){
+            p.y = -10;
+            p.x = Math.random()*canvas.width;
+        }
+
+        ctx.fillStyle = p.color;
+        ctx.save();
+        ctx.translate(p.x,p.y);
+        ctx.rotate(p.angle * Math.PI / 180);
+        ctx.fillRect(-p.size/2, -p.size/2, p.size, p.size);
+        ctx.restore();
+    });
+
+    requestAnimationFrame(draw);
+}
+
+draw();
+</script>
+{% endif %}
+</body>
+</html>

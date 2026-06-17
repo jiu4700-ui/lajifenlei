@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>答题游戏</title>
+    <link rel="stylesheet" href="/static/style.css">
+
+    <style>
+        /* ===== 基础卡片 ===== */
+        .card{
+            background:white;
+            border-radius:16px;
+            padding:18px;
+            margin-bottom:16px;
+            box-shadow:0 6px 20px rgba(0,0,0,0.06);
+        }
+
+        .center{
+            text-align:center;
+        }
+
+        /* ===== 选项按钮（关键修复） ===== */
+        form button{
+            display:block;
+            width:100%;
+            margin:10px 0;
+            padding:12px 14px;
+
+            border:none;
+            border-radius:12px;
+            cursor:pointer;
+
+            background:#f7fbf9;     /* 不再白到看不见 */
+            color:#1a2b25;          /* 深绿色文字 */
+
+            box-shadow:0 4px 12px rgba(0,0,0,0.06);
+            transition:0.2s;
+
+            font-size:15px;
+            text-align:left;
+        }
+
+        form button:hover{
+            transform:scale(1.03);
+            background:#e8f5e9;
+            box-shadow:0 6px 16px rgba(45,122,95,0.18);
+        }
+
+
+
+
+        /* ===== 普通按钮（下一题/结束） ===== */
+        button{
+            border:none;
+            padding:10px 14px;
+            border-radius:10px;
+            cursor:pointer;
+            background:#2d7a5f;
+            color:white;
+            transition:0.2s;
+        }
+
+        button:hover{
+            transform:scale(1.05);
+        }
+
+        /* 结束按钮红色 */
+        .danger{
+            background:#c62828;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- 题目 -->
+    <div class="card">
+
+        <h3>第 {{ q_index }} 题</h3>
+
+        <p>{{ q.question }}</p>
+
+        {% if result is not defined or result == None %}
+
+        <form method="post" action="/submit_quiz">
+
+            <button type="submit" name="answer" value="A">
+                {{ q.option_a }}
+            </button>
+
+            <button type="submit" name="answer" value="B">
+                {{ q.option_b }}
+            </button>
+
+            <button type="submit" name="answer" value="C">
+                {{ q.option_c }}
+            </button>
+
+        </form>
+
+        {% endif %}
+
+    </div>
+
+    <!-- 结果 -->
+    {% if result is not none %}
+    <div class="card">
+
+        {% if result %}
+            ✔ 回答正确
+        {% else %}
+            ❌ 回答错误，正确答案：{{ correct_answer }}
+        {% endif %}
+
+    </div>
+    {% endif %}
+
+    <!-- 分数 -->
+    <div class="card center">
+
+        <p>本轮得分：{{ score }}</p>
+        <p>总积分：{{ total }}</p>
+
+    </div>
+
+    <!-- 控制 -->
+    <div class="card center">
+
+        {% if result is not none %}
+        <a href="/next_question">
+            <button>下一题</button>
+        </a>
+        {% endif %}
+
+        <a href="/end_quiz">
+            <button class="danger">结束答题</button>
+        </a>
+
+    </div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>反馈</title>
+ <link rel="stylesheet" href="/static/style.css">
+<style>
+
+
+/* 容器 */
+.container{
+    max-width:700px;
+    margin:30px auto;
+    padding:20px;
+}
+
+/* 卡片 */
+.card{
+    background:white;
+    padding:18px;
+    border-radius:14px;
+    margin-bottom:16px;
+    box-shadow:0 6px 18px rgba(0,0,0,0.06);
+}
+
+/* ⭐关键修复：防溢出 */
+input{
+    width:100%;
+    max-width:100%;
+    box-sizing:border-box;
+    padding:10px 12px;
+    margin:8px 0;
+    border-radius:10px;
+    border:1px solid #dcebe3;
+    outline:none;
+}
+
+/* 输入框聚焦 */
+input:focus{
+    border-color:#2d7a5f;
+    box-shadow:0 0 0 3px rgba(45,122,95,0.15);
+}
+
+/* 按钮 */
+button{
+    width:100%;
+    padding:12px;
+    border:none;
+    border-radius:10px;
+    background:#2d7a5f;
+    color:white;
+    font-weight:600;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#256b53;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="top-bar">
+    <a href="/" class="nav-home">🏠 首页</a>
+    <div class="nav-title">识别反馈</div>
+</div>
+
+<div class="container">
+    <div>
+        <h2></h2>
+    </div>
+    <div class="card">
+        <h3>反馈错误分类</h3>
+
+        <p><b>垃圾：</b>{{ name }}</p>
+        <p><b>系统分类：</b>{{ wrong_category }}</p>
+    </div>
+
+    <div class="card">
+
+        <form method="post" action="/feedback_submit">
+
+            <input name="name" value="{{ name }}" readonly>
+            <input name="wrong_category" value="{{ wrong_category }}" readonly>
+
+            <input name="correct_category" placeholder="正确分类">
+
+            <button type="submit">提交反馈</button>
+
+        </form>
+
+    </div>
+
+</div>
+
+</body>
+</html>

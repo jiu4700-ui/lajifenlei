@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>AI识别</title>
+    <link rel="stylesheet" href="/static/style.css">
+
+    <style>
+        /* ===== 统一容器 ===== */
+        .container{
+            max-width:900px;
+            margin:0 auto;
+            padding:20px;
+        }
+
+        /* ===== 上传卡片 ===== */
+        .upload-card{
+            border:1px solid #e6efe9;
+            border-radius:16px;
+            padding:24px;
+            background:white;
+            margin-bottom:20px;
+            transition:0.25s;
+        }
+
+        .upload-card:hover{
+            box-shadow:0 10px 25px rgba(45,122,95,0.12);
+            transform:translateY(-2px);
+        }
+
+        .upload-icon{
+            font-size:36px;
+        }
+
+        .upload-text{
+            font-weight:600;
+            margin-top:8px;
+            color:#1a2b25;
+        }
+
+        .upload-sub{
+            font-size:12px;
+            color:#7a8a82;
+            margin-top:4px;
+        }
+
+        /* ===== 拖拽区域 ===== */
+        .drop-area{
+            margin-top:16px;
+            border:2px dashed #2d7a5f;
+            border-radius:14px;
+            padding:28px;
+            text-align:center;
+            background:#f7fbf9;
+            transition:0.3s;
+            cursor:pointer;
+        }
+
+        .drop-area:hover{
+            background:#eef7f2;
+            transform:scale(1.01);
+        }
+
+        .drop-area.active{
+            box-shadow:0 0 0 4px rgba(45,122,95,0.18);
+        }
+
+        .drop-icon{
+            font-size:34px;
+        }
+
+        .drop-title{
+            margin-top:6px;
+            font-weight:600;
+            color:#1a2b25;
+        }
+
+        .drop-sub{
+            font-size:12px;
+            color:#7a8a82;
+            margin-top:4px;
+        }
+
+        /* ===== 预览 ===== */
+        .preview-box{
+            position:relative;
+            margin-top:12px;
+            display:none;
+        }
+
+        .preview-box img{
+            width:100%;
+            border-radius:12px;
+        }
+
+        /* 扫描线 */
+        .scan-line{
+            position:absolute;
+            left:0;
+            top:0;
+            width:100%;
+            height:3px;
+            background:#2d7a5f;
+            box-shadow:0 0 10px rgba(45,122,95,0.6);
+            animation:scan 1.5s linear infinite;
+        }
+
+        @keyframes scan{
+            0%{ top:0; }
+            100%{ top:100%; }
+        }
+
+        /* ===== file隐藏 ===== */
+        input[type="file"]{
+            display:none;
+        }
+
+        button{
+            margin-top:10px;
+            padding:10px 14px;
+            border:none;
+            border-radius:10px;
+            background:#2d7a5f;
+            color:white;
+            cursor:pointer;
+        }
+
+        button:hover{
+            filter:brightness(1.05);
+        }
+
+        /* ===== 拍照区 ===== */
+        video{
+            width:100%;
+            border-radius:12px;
+            margin-top:10px;
+        }
+
+    </style>
+</head>
+
+<body>
+
+<!-- 顶部 -->
+<div class="top-bar">
+    <a href="/" class="nav-home">🏠 首页</a>
+    <div class="nav-title">AI 垃圾识别</div>
+</div>
+
+<div class="container">
+
+    <div class="ai-row">
+         <div class="ai-col">
+        <!-- ================= 上传识别 ================= -->
+            <div class="upload-card">
+
+                <div class="upload-icon">📸</div>
+                <div class="upload-text">上传图片识别</div>
+                <div class="upload-sub">拖拽或点击上传（JPG / PNG）</div>
+
+                <!-- 拖拽区域 -->
+                <div class="drop-area" id="dropArea" onclick="fileInput1.click()">
+
+                    <div class="drop-icon">📂</div>
+                    <div class="drop-title">拖拽图片到这里</div>
+                    <div class="drop-sub">或点击选择文件</div>
+
+                    <form action="/ai_upload" method="post" enctype="multipart/form-data">
+
+                        <input type="file" name="image" id="fileInput1"
+                               accept="image/*"
+                               onchange="preview(this,'preview1','box1')">
+
+                        <button type="submit">开始识别</button>
+
+                        <div class="preview-box" id="box1">
+                            <img id="preview1">
+                            <div class="scan-line"></div>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+          </div>
+
+        <!-- ================= 拍照识别 ================= -->
+        <div class="ai-col">
+            <div class="upload-card">
+
+                <div class="upload-icon">📷</div>
+                <div class="upload-text">拍照识别</div>
+
+                <video id="video" autoplay></video>
+
+                <button onclick="takePhoto()">拍照</button>
+
+                <canvas id="canvas" style="display:none;"></canvas>
+
+                <form action="/ai_upload" method="post" enctype="multipart/form-data">
+
+                    <input type="file" name="image" id="fileInput2">
+
+                    <button type="submit">提交拍照结果</button>
+
+                    <div class="preview-box" id="box2">
+                        <img id="preview2img">
+                        <div class="scan-line"></div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+const video = document.getElementById('video');
+
+navigator.mediaDevices.getUserMedia({ video: true })
+.then(stream => {
+    video.srcObject = stream;
+});
+
+/* ===== 文件预览 ===== */
+function preview(input, imgId, boxId){
+    const file = input.files[0];
+    if(!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function(e){
+        document.getElementById(imgId).src = e.target.result;
+        document.getElementById(boxId).style.display = "block";
+    };
+    reader.readAsDataURL(file);
+}
+
+/* ===== 拍照 ===== */
+function takePhoto(){
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+
+    ctx.drawImage(video,0,0);
+
+    const dataURL = canvas.toDataURL('image/png');
+
+    const file = dataURLtoFile(dataURL,"photo.png");
+
+    const dt = new DataTransfer();
+    dt.items.add(file);
+
+    document.getElementById('fileInput2').files = dt.files;
+
+    document.getElementById('preview2img').src = dataURL;
+    document.getElementById('box2').style.display = "block";
+}
+
+/* ===== base64转file ===== */
+function dataURLtoFile(dataurl, filename){
+    const arr = dataurl.split(',');
+    const mime = arr[0].match(/:(.*?);/)[1];
+    const bstr = atob(arr[1]);
+
+    let n = bstr.length;
+    const u8arr = new Uint8Array(n);
+
+    while(n--){
+        u8arr[n] = bstr.charCodeAt(n);
+    }
+
+    return new File([u8arr], filename,{type:mime});
+}
+
+/* ===== 拖拽效果 ===== */
+const dropArea = document.getElementById('dropArea');
+
+dropArea.addEventListener('dragover',e=>{
+    e.preventDefault();
+    dropArea.classList.add('active');
+});
+
+dropArea.addEventListener('dragleave',()=>{
+    dropArea.classList.remove('active');
+});
+
+dropArea.addEventListener('drop',e=>{
+    e.preventDefault();
+    dropArea.classList.remove('active');
+
+    const files = e.dataTransfer.files;
+    if(files.length){
+        fileInput1.files = files;
+        preview(fileInput1,'preview1','box1');
+    }
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<!-- 顶部 -->
+<div class="top-bar">
+    <a href="/" class="nav-home">🏠 首页</a>
+    <div class="nav-title">管理员后台</div>
+</div>
+<head>
+    <meta charset="UTF-8">
+    <title>管理员后台</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+
+<div class="container">
+    <div>
+        <h2></h2>
+    </div>
+    <div class="card center">
+
+        <h2>🛠 管理员后台</h2>
+
+        <p>欢迎，{{ session.nickname }}</p>
+
+    </div>
+
+    <!-- 功能入口 -->
+    <div class="card">
+
+        <h3>功能管理</h3>
+
+        <div class="admin-grid">
+
+            <a href="/admin_feedback">
+                <button>📩 反馈管理</button>
+            </a>
+
+            <a href="/admin_rubbish">
+                <button>🗑 垃圾库管理</button>
+            </a>
+
+            <a href="/admin_question">
+                <button>❓ 题库管理</button>
+            </a>
+
+            <a href="/admin_users">
+                <button>👥 用户管理</button>
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

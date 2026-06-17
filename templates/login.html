@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>登录</title>
+<link rel="stylesheet" href="/static/style.css">
+<style>
+
+
+/* 容器 */
+.container{
+    max-width:420px;
+    margin:100px auto;
+    padding:20px;
+}
+
+/* 卡片 */
+.card{
+    background:white;
+    padding:28px;
+    border-radius:16px;
+    box-shadow:0 6px 18px rgba(0,0,0,0.06);
+    text-align:center;
+}
+
+/* 标题 */
+h2{
+    color:#1a2b25;
+    margin-bottom:20px;
+}
+
+/* 输入框 */
+input{
+    width:100%;
+    box-sizing:border-box;
+    padding:12px;
+    margin:10px 0;
+    border-radius:10px;
+    border:1px solid #dcebe3;
+    outline:none;
+    transition:0.2s;
+}
+
+input:focus{
+    border-color:#2d7a5f;
+    box-shadow:0 0 0 3px rgba(45,122,95,0.15);
+}
+
+/* 按钮 */
+button{
+    width:100%;
+    padding:12px;
+    margin-top:10px;
+    border:none;
+    border-radius:10px;
+    background:#2d7a5f;
+    color:white;
+    font-weight:600;
+    cursor:pointer;
+    transition:0.2s;
+}
+
+button:hover{
+    background:#256b53;
+    transform:scale(1.02);
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="card">
+
+        <h2>登录</h2>
+
+        <form method="post">
+
+            <input name="phone" placeholder="手机号">
+            <input name="password" type="password" placeholder="密码">
+
+            <button type="submit">登录</button>
+
+        </form>
+
+    </div>
+
+</div>
+
+</body>
+</html>

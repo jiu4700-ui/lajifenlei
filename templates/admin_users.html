@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<!-- 顶部 -->
+<div class="top-bar">
+    <a href="/" class="nav-home">🏠 首页</a>
+    <div class="nav-title">用户管理</div>
+</div>
+<head>
+    <meta charset="UTF-8">
+    <title>用户管理</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+
+<div class="container">
+    <div>
+        <h2></h2>
+    </div>
+    <div class="card center">
+        <h2>👥 用户管理</h2>
+    </div>
+
+    {% for u in users %}
+
+    <div class="card">
+
+        <p>用户ID：{{ u.id }}</p>
+        <p>昵称：{{ u.nickname }}</p>
+        <p>手机号：{{ u.phone }}</p>
+        <p>总积分：{{ u.total_points }}</p>
+
+        <p>
+            管理员：
+            {% if u.is_admin %}
+                ✔ 是
+            {% else %}
+                ❌ 否
+            {% endif %}
+        </p>
+
+        {% if not u.is_admin %}
+        <a href="/admin_set_admin/{{ u.id }}">
+            <button>设为管理员</button>
+        </a>
+        {% else %}
+        <a href="/admin_cancel_admin/{{ u.id }}">
+            <button style="background:#c62828;">取消管理员</button>
+        </a>
+        {% endif %}
+
+    </div>
+
+    {% endfor %}
+
+</div>
+
+</body>
+</html>

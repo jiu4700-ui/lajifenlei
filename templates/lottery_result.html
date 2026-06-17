@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>抽奖结果</title>
+ <link rel="stylesheet" href="/static/style.css">
+<style>
+
+
+/* 容器 */
+.container {
+    max-width: 500px;
+    margin: 80px auto;
+    padding: 20px;
+}
+
+/* 卡片 */
+.card {
+    background: white;
+    padding: 30px;
+    border-radius: 16px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+    text-align: center;
+}
+
+/* 结果 */
+.result {
+    font-size: 26px;
+    margin: 20px 0;
+    font-weight: bold;
+    color: #1a2b25;
+}
+
+/* 积分 */
+.score {
+    font-size: 16px;
+    color: #2d7a5f;
+    margin-bottom: 20px;
+}
+
+
+
+/* 纸花动画（轻量） */
+.confetti {
+    position: fixed;
+    width: 8px;
+    height: 8px;
+    background: #2d7a5f;
+    top: -10px;
+    animation: fall 3s linear infinite;
+    opacity: 0.7;
+}
+
+@keyframes fall {
+    to {
+        transform: translateY(100vh) rotate(360deg);
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- 轻量纸花 -->
+<script>
+for(let i=0;i<30;i++){
+    const d=document.createElement("div");
+    d.className="confetti";
+    d.style.left=Math.random()*100+"vw";
+    d.style.animationDuration=(2+Math.random()*3)+"s";
+    document.body.appendChild(d);
+}
+</script>
+
+<div class="container">
+
+    <div class="card">
+
+        <h2 style="color:#2d7a5f;">🎉 抽奖结果</h2>
+
+        <div class="result">{{ result }}</div>
+
+        <div class="score">
+            当前积分：{{ total }}
+        </div>
+
+        <button onclick="location.href='/me'">返回我的</button>
+
+    </div>
+
+</div>
+
+</body>
+</html>
